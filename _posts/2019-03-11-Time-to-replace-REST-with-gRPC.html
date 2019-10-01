@@ -1,0 +1,193 @@
+---
+layout: post
+title: "Time to replace REST (HTTP/1.1) with gRPC (HTTP/2)"
+date: 2019-03-11 23:45:13 -0400
+background: '/img/posts/03.jpg'
+---
+
+<p>
+    HTTP/2 is a new version of HTTP, that is a major update of HTTP after the introduction 
+    of HTTP/1.1 in 1999.
+</p>
+<p>
+    While communicating client with the server, HTTP/1.1 process one request per TCP 
+    connection, to process multiple requests simultaneously, the client uses multiple TCP 
+    connections in parallel. HTTP/1.1 works on request-response protocol where each 
+    connection supports pipelining. This supports single direction streaming but does not 
+    support bi-directional streaming. HTTP/1.1 supports SSL, but for that, it establishes 
+    an extra connection, that is complete one extra cycle. More connections result in more 
+    wait times.
+</p>
+<p>
+    GRPC is a high-performance, open-source universal RPC framework initially developed by 
+    Google. It uses Protocol Buffers to define service. It establishes one connection like 
+    a tunnel and sends all response in one communication.
+</p>
+
+<img class="img-fluid" src="/img/posts/grpc01.png" alt="Demo Image">
+<span class="caption text-muted">Communication in HTTP/1.1 (REST calls).</span>
+
+<p>
+    In REST, there is a separate request and response for header, body, SSL, etc.. with a 
+    separate connection is required. But in gRPC, once a connection is established, the 
+    client sends one request and in turns service returns all the response in the same 
+    connection.
+</p>
+<img class="img-fluid" src="/img/posts/grpc02.png" alt="Demo Image">
+<span class="caption text-muted">Communication in HTTP/2.</span>
+
+<p>
+    gRPC is being supported by many languages and platforms. You can generate client and 
+    server stubs to communicate between client and server or between services using Protocol 
+    Buffers.
+</p>
+<img class="img-fluid" src="/img/posts/grpc03.png" alt="Demo Image">
+
+<p>
+    Below is officially supported language with supported compilers for gRPC:
+</p>
+<ul>
+    <li>C/C++ (GCC 4.4, 4.6, 5.3, Clang 3.5, 3.6, 3.7, Visual Studio 2013+)</li>
+    <li>C# (.Net core, .Net 4.5+, Mono 4+)</li>
+    <li>Dart (Dart 2.0 +)</li>
+    <li>Go ( Go 1.6 +)</li>
+    <li>Java (JDK 8+)</li>
+    <li>Node.js (Node v4+)</li>
+    <li>PHP (currently in beta)</li>
+    <li>Python (Python 2.7 and Python 3.4+)</li>
+    <li>Ruby</li>
+</ul>
+<p>The main usage scenarios for gRPC is:</p>
+<ul>
+    <li>Efficiently connecting polyglot services in microservices style architecture.</li>
+    <li>Connecting mobile devices, browser clients to backend services.</li>
+    <li>Generating efficient client libraries.</li>
+</ul>
+<p>Core Features that make it awesome:</p>
+<ul>
+    <li>Idiomatic client libraries in 10 languages.</li>
+    <li>Highly efficient on the wire and with a simple service definition framework</li>
+    <li>Bi-directional streaming with http/2 based transport</li>
+    <li>Pluggable auth, tracing, load balancing, and health checking</li>
+</ul>
+<p>
+    gRPC introduced three new concepts, that is channels, remote procedure calls (RPCs) 
+    and messages. The relationship between these three is: each channel can have many RPCs, 
+    and each RPC can have many messages. It has a one-to-many relationship between channels 
+    and RPCs, and again one-to-many relationship between RPC and Messages.
+</p>
+<p>
+    Channels are virtual connecting between endpoints, RPC is HTTP/2 streams, and messages 
+    are associated with RPC and get sent as HTTP/2 data frames. A data frame can have many 
+    messages, or if one message is too big it can span to many data frames.
+</p>
+<p>
+    Once connection established between client and server, it creates like a tunnel and 
+    keeps that tunnel open for communication. For each set of client and server 
+    communication, there is a separate tunnel, in that way it will make several connections 
+    and keep all connections open that make communication super fast.
+</p>
+<p>
+    Using Resolver and Load Balancer, gRPC keeps the pool of connections healthy, alive and 
+    utilized. When a connection fails, the Load Balancer will begin to reconnect using the 
+    last known list of addresses, meanwhile, the resolver will begin to re-resolve the list 
+    of hostnames. Once resolution finished, the Load Balancer is informed of the new 
+    addresses. To check the health of connection gRPC periodically sending HTTP/2 PING 
+    frames on connections to determine whether the connection is still alive.
+</p>
+<h3 class="section-heading">Implementation:</h3>
+<p>
+    To write gRPC server or client, first, we can define service in a .proto file and 
+    implement client and servers in any gRPC supported languages.
+</p>
+<p>.proto file will look like this:</p>
+<code>
+        syntax = “proto3”;<br>
+        option java_multiple_files = true;<br>
+        option java_package = “grpc.test.testMe”;<br>
+        option java_outer_classname = “TestMeProto”;<br>
+        option objc_class_prefix = “TM”;<br>
+        <br>
+        package testMe;<br>
+        <br>
+        service Testing {<br>
+        rpc SayMessage (TestRequest) returns (TestReply) {}<br>
+        }<br>
+        <br>
+        message TestRequest {<br>
+        string test = 1;<br>
+        }<br>
+        <br>
+        message TestReply {<br>
+        string test = 1;<br>
+        }<br>
+</code>
+<p>
+    Using .proto file, generate server and client using Protocol Buffer Compiler.
+    And in the final step, use gRPC API of respective language to write client and server.
+    Protocol Buffer is a mechanism for serializing structured data.
+    You can learn more about Protocol Buffer from :
+</p>
+<a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank">https://developers.google.com/protocol-buffers/docs/proto3</a>
+<h3 class="section-heading">gRPC service method:</h3>
+<p>You can define four types of service method:</p>
+<ol>
+    <li>
+        Unary RPCs: In this method, the client sends a single request to the server and gets 
+        back a single response. Example: rpc SayMessage (TestRequest) returns (TestReply) {} 
+        This is like a normal function call.
+    </li>
+    <li>
+        Server streaming RPCs: In this method, the client sends a single request to the server 
+        and get a stream to read a sequence of messages until there are no more messages. Here 
+        gRPC guarantees message ordering . Example: rpc SequenceOfResponse (TestRequest) 
+        returns (stream TestReply) {}
+    </li>
+    <li>
+        Client streaming RPCs: In this method, the client writes a sequence of messages and 
+        send them to the server, once the client finished writing a message it waits for the 
+        server to read and send its response. Here gRPC guarantees message ordering. Example: 
+        rpc SequenceOfRequest (stream TestRequest) returns (TestReply) {}
+    </li>
+    <li>
+        Bidirectional streaming RPCs: This is a combination of Server streaming and Client 
+        streaming RPCs. In this method both send a sequence of the message using read-write 
+        streams. Here also gRPC guarantees message ordering in each stream. Example: rpc 
+        SequenceOfRequest (stream TestRequest) returns (stream TestReply) {}
+    </li>
+</ol>
+<h3 class="section-heading">Strategy to migrate from REST to gRPC:</h3>
+<p>
+    we have already written lots of microservices using REST, to move those microservices 
+    to gRPC not too much pain if you will plan it correctly.
+</p>
+<p>
+    You have all business logic written in each microservices, a plan to change from REST 
+    to gRPC can have below steps:
+</p>
+<ul>
+    <li>
+        STEP-1: Design gRPC API for your similar REST API, for example. REST: POST test/nameAdd 
+        gRPC equivalent : rpc AddName( Name){ return NameIndex; } REST: 
+        GET test/name/{ nameIndex } gRPC equivalent : rpc GetName( nameIndex ){ return Name; }
+    </li>
+    <li>
+        STEP-2: Run both REST and gRPC services initially, so that rest client and gRPC client 
+        both can have access of implemented services.
+    </li>
+    <li>
+        STEP-3: Solve problem area, like health check and API discovery.
+    </li>
+    <li>
+        STEP-4: Remove REST services.
+    </li>
+</ul>
+<h3 class="section-heading">Current HTTP/2 support:</h3>
+<p>
+    This is a relatively new technology that big companies already started implementing, 
+    still, HTTP/1.1 (REST) is leading in current developments of microservices. Slowly more 
+    tools and support will come and confidence will build up for HTTP/2. For sure REST will 
+    become thing of past and industry will move to HTTP/2.
+</p>
+
+<p>Photographs by <a href="https://unsplash.com/" target="_blank">Unsplash</a>.</p>

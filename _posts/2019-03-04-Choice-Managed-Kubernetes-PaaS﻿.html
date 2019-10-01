@@ -1,0 +1,92 @@
+---
+layout: post
+title: "Choice of Managed Kubernetes and PaaS"
+date: 2019-03-04 23:45:13 -0400
+background: '/img/posts/01.jpg'
+---
+
+<p>If you want your cloud provider should take more responsibility and you 
+    can focus on your core business (code), in this case, the first thing that 
+    comes in mind is PaaS.</p>
+
+<p>PaaS is great, you just have to manage your code, that is what your core expertise is. 
+    Cloud provider is responsible for almost everything else.</p>
+
+<p>PaaS, as defined by NIST, is:</p>
+
+<blockquote class="blockquote"> The capability provided to the consumer 
+    is to deploy onto the cloud infrastructure consumer-created or acquired 
+    applications created using programming languages, libraries, services, and 
+    tools supported by the provider. The consumer does not manage or control the 
+    underlying cloud infrastructure including network, servers, operating systems, 
+    or storage, but has control over the deployed applications and possibly 
+    configuration settings for the application-hosting environment.</blockquote>
+
+<p>Cloud providers come with an approach that how to run the application 
+    on PaaS to get maximum benefit, the most discussed approach is 
+    the <a href="https://12factor.net/" target="_blank">12-factor</a> 
+    approach referred by Cloud Foundry. After going through all the benefits of 
+    the PaaS, a strong opinion about PaaS builds up in mind and feel like this 
+    is the best solution for deploying the application without any overhead. 
+    This is true if you are developing a new application from scratch. 
+    This is most suited to the web application or mobile application you are 
+    planning to build.</p>
+
+<p>If you already have an application running on your hardware and you are planning 
+    to move to the cloud, in that case, is PaaS a good option? You have analyzed effort 
+    of refactoring and you are ready to do refactoring of your application to move 
+    it to PaaS. But you want to try first and you are not sure which cloud provider 
+    you will choose, that could be AWS, Azure, IBM, GCP or any other cloud. In that case, 
+    you have to evaluate the cloud platform and decide cloud vendor first before start 
+    refactoring.</p>
+
+<p>You have decided to use third-party PaaS like Cloud Foundry or Openshift, 
+    so that you may be open for any cloud vendor. By using independent 
+    open source PaaS, you will have the flexibility to move your application 
+    to any underline IaaS provided by public cloud vendor or own infrastructure 
+    that is a private cloud. In this case, you are not locking with any IaaS, 
+    but you may still have possibly getting locked with vendors like Cloud Foundry 
+    or Openshift.</p>
+
+<p>To move existing applications to cloud with minimum infrastructure responsibility, 
+    Managed Kubernetes is the best solution. Kubernetes is an open source system for 
+    automating deployment, scaling, and management of containerized applications. 
+    Managed Kubernetes is a managed service that managed nodes (Instances) of the 
+    cluster where containers are running inside pods. Kubernetes can scale without 
+    having much burden on the ops team. Kubernetes is a management framework for the 
+    container in an IaaS, and Managed Kubernetes is a managed service that allows the 
+    user to deploy their code in a container in the provided platform by cloud vendors.</p>
+
+<p>Managed Kubernetes is a “Kubernetes as a Service” that simplifies deployment and you 
+    can focus on development. Fully managed Kubernetes is being provided by almost all 
+    cloud vendor, as this is an open source solution, you can switch to any vendor any 
+    time without any issue.</p>
+
+<img class="img-fluid" src="/img/posts/eks.png" alt="Demo Image">
+<span class="caption text-muted">Amazon EKS.</span>
+    
+<p>Managed Kubernetes Service advantage:</p>
+<ul>
+    <li>You can focus on your core business.</li>
+    <li>You will not run your application in underlying VM using PaaS, instead, 
+        you will run your application in containers using Kubernetes service.</li>
+    <li>Managed Kubernetes service can run on your on-premises, any public cloud, 
+        the mix of public and private cloud.</li>
+    <li>It can run on your laptop, on your data center, and on the public cloud.</li>
+    <li>Self-healing infrastructure.</li>
+    <li>No vendor lock-in traps.</li>
+    <li>Easy audit and log aggregation.</li>
+    <li>It provides one-click deployment similar to PaaS (or can be deployed with one command).</li>
+</ul>
+
+<p>There are many hosted solutions available for Managed Kubernetes Engine, some of them are:</p>
+<ul>
+    <li>Amazon Elastic Container Service for Kubernetes (EKS).</li>
+    <li>Azure Kubernetes Service</li>
+    <li>IBM Cloud Kubernetes Service</li>
+    <li>VMware Cloud PKS</li>
+    <li>Google Kubernetes Engine</li>
+    <li>DigitalOcean Kubernetes</li>
+    <li>Oracle Container Engine for Kubernetes</li>
+</ul>
+<p>Photographs by <a href="https://unsplash.com/" target="_blank">Unsplash</a>.</p>

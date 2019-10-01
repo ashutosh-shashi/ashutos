@@ -1,0 +1,199 @@
+---
+layout: post
+title: "New switch expressions in Java JDK 12"
+date: 2019-03-17 23:45:13 -0400
+background: '/img/posts/openjdk.png'
+---
+
+<p>New switch expressions will be available as preview feature is JDK 12.</p>
+<h3 class="section-heading">What is a preview feature?</h3>
+<p>
+    Preview features are available for those who want to use those feature before its final 
+    release of JDK. You can use preview feature if you have enabled it for JDK 12, by 
+    default it will not be available for you.
+</p>
+<p>Below is how preview features are defined by OpenJDK:</p>
+<blockquote class="blockquote">
+    A preview language or VM feature is a new feature of the Java SE Platform that is fully 
+    specified, fully implemented, and yet impermanent. It is available in a JDK feature 
+    release to provoke developer feedback based on real-world use; this may lead to it 
+    becoming permanent in the future Java SE Platform.
+</blockquote>
+<p>
+    It is a fully implemented feature, released first for developer feedback. It will be 
+    not experimental, high quality and universally available. This preview feature will 
+    be available to enable it to compile and run time.
+</p>
+<p>
+    To enable it at compile time by using –enable-preview as below:
+</p>
+<code>
+        javac --release 12 --enable-preview Foo.java  // Enable all preview features of Java SE 12        
+</code>
+<p>and to enable it at run time as below: </p>
+<code>
+    java --enable-preview -jar App.jar  // Enable all preview features of Java SE 12
+</code>
+<h3 class="section-heading">The current switch Statement in Java: </h3>
+<p>
+    Currently, Java is having a switch statement very similar to C or C++ language. It has many case: and break; statements. If you will miss any break statement then your program will not work correctly.
+</p>
+<pre> 
+<code>
+        switch (subject) {
+            case PHYSICS:
+            case CHEMISTRY:
+            case BIOLOGY:
+                System.out.println("Science");
+                break;
+            case GEOGRAPHY:
+            case HISTORY:
+            case POL_SCIENCE:
+                System.out.println("social Sciences");
+                break;
+        }
+</code>
+</pre>
+<h3 class="section-heading">The newly proposed switch statements in JDK 12:</h3>
+<p>
+    The new proposed switch statement for JDK 12 can compute a value or can execute a 
+    statement that will match with a case.
+</p>
+<p>
+    To compute a value now break can have a value that it will return. Break statement 
+    without a value is similar to the old version of switch statement defined above.
+</p>
+<p>
+    Below is the example mentioned in JDK 12 can have a break statement with value, 
+    this is the implementation of switch that can compute a value:
+</p>
+
+<pre>
+    <code>
+            int result = switch (s) {
+                case "Foo": 
+                    break 1;
+                case "Bar":
+                    break 2;
+                default:
+                    System.out.println("Neither Foo nor Bar, hmmm...");
+                    break 0;
+            };
+    </code>
+</pre>
+<p>
+    in the above example, the result will be the value break will have at the time of 
+    executing a break statement.
+</p>
+<p>
+    The new switch statement is also proposed to add a new “simplified” form, 
+    with new “case L ->” switch labels.
+</p>
+<pre>
+    <code>
+            switch (k) {
+                case 1 -> System.out.println("one");
+                case 2 -> System.out.println("two");
+                case 3 -> System.out.println("many");
+            }
+    </code>
+</pre>
+<p>
+    It can have a default case as well:
+</p>
+<pre>
+    <code>
+            switch (k) {
+                case 1 -> System.out.println("one");
+                case 2 -> System.out.println("two");
+                case 3 -> System.out.println("many");
+              default -> System.out.println("default");
+            }
+    </code>
+</pre>
+<p>
+    This is very similar to the earlier switch statement, but a break statement is not 
+    needed here. We can use new “case L →” labels to get computed values as well as below:
+</p>
+<pre>
+    <code>
+            int numLetters = switch (day) {
+                case MONDAY, FRIDAY, SUNDAY -> 6;
+                case TUESDAY                -> 7;
+                case THURSDAY, SATURDAY     -> 8;
+                case WEDNESDAY              -> 9;
+            };
+            
+            Here numLetters value is dependent on the case executed.
+    </code>
+</pre>
+<p>
+    If we need multi-line statement for each case then we can have {} block. If we need 
+    multi-line statement but need computed value out of switch statement then we have to 
+    use the break statement to return a value similar to earlier example returning value 
+    through break statement using new “case L →” labels. Below is the example quoted 
+    by JDK 12:
+</p>
+<pre>
+    <code>
+            int j = switch (day) {
+                case MONDAY  -> 0;
+                case TUESDAY -> 1;
+                default      -> {
+                    int k = day.toString().length();
+                    int result = f(k);
+                    break result;
+                }
+            };
+    </code>
+</pre>
+<p>
+    In either format of case labels, the new “case L →” labels or “case L:” labels, 
+    if it is non-void switch, that returns a value, it must be complete with a value 
+    or throw an exception. A switch statement cannot be a combination of void and a 
+    non-void switch labels. Below switch statements are incorrect:
+</p>
+<pre>
+    <code>
+            int i = switch (day) {
+                case MONDAY -> {
+                    System.out.println("Monday"); 
+                    // ERROR! Block doesn't contain a break with value
+                }
+                default -> 1;
+            };
+            i = switch (day) {
+                case MONDAY, TUESDAY, WEDNESDAY: 
+                    break 0;
+                default: 
+                    System.out.println("Second half of the week");
+                    // ERROR! Group doesn't contain a break with value
+            };
+    </code>
+</pre>
+<p>
+    Also as per JDK 12 new switch statement proposal, control statements, break, return 
+    and continue, cannot jump through a switch expression, such as in the following:
+</p>
+<pre>
+    <code>
+            int k = switch (e) { 
+                case 0:  
+                    break 1;
+                case 1:
+                    break 2;
+                default: 
+                    continue z; 
+                    // ERROR! Illegal jump through a switch expression 
+            };
+    </code>
+</pre>
+<p>
+    In JDK 12, they may expand switch to support switching on primitive types (and their 
+    box types) that have previously been disallowed, such as float, double, and long.
+</p>
+<p>
+    I think these new switch feature will increase the usability of the switch statement.
+</p>
+
+<p>Photographs by <a href="https://unsplash.com/" target="_blank">Unsplash</a>.</p>

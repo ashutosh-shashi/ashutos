@@ -1,0 +1,151 @@
+---
+layout: post
+title: "Cloud Security: Vulnerabilities and Threats."
+date: 2019-04-12 23:45:13 -0400
+background: '/img/posts/05.jpg'
+---
+<p>
+    Cloud security is the security of an application, data, infrastructure, and network 
+    in cloud computing. Security in public cloud is a shared responsibility between user 
+    and cloud service provider. Many organization uses Hybrid cloud to have better 
+    security so that they can keep the most sensitive data in private cloud within 
+    own data center boundary. Shared responsibility also gets changed with the cloud 
+    vendor and what is in SLA that you signed.
+</p>
+<p>
+    AWS defines shared responsibility as AWS is responsible for “security of the cloud” 
+    that means hardware, software, networking, and facilities that run AWS Cloud services. 
+    Customer is responsible for “security in the cloud” means If a customer deploys an 
+    Amazon EC2 instance, they are responsible for management of the guest operating system 
+    (including updates and security patches), any application software or utilities 
+    installed by the customer on the instances, and the configuration of the AWS-provided 
+    firewall (called a security group) on each instance.
+</p>
+<img class="img-fluid" src="/img/posts/sharedresponsibility.jpg" alt="Demo Image">
+<span class="caption text-muted">Shared responsibility (AWS).</span>
+<p>
+    Before designing security first you should do the cost-benefit analysis and 
+    risk tolerance of organization. Every workload does not require the highest level of 
+    encryption and security.
+</p>
+<p>
+    If you are migrating from your data center to cloud, you will need to have all the 
+    security measures that you have an on-premises data center. But when you are migrating 
+    from in-house data center to third-party data center, you have to put some additional 
+    security measure because of multi-tenancy nature of the public cloud.
+</p>
+<p>
+    To ensure security, cloud vendor and cloud customer can use Cloud Controls 
+    Matrix (CCM), a control framework provided by Cloud Security Alliance (CSA), 
+    that provides industry-accepted security standards. The CSA CCM is specifically 
+    designed to provide fundamental security principles to guide cloud vendors and to 
+    assist prospective cloud customers in assessing the overall security risk of a cloud 
+    provider. As a framework, the CSA CCM provides organizations with the needed structure, 
+    detail, and clarity relating to information security tailored to the cloud industry.
+</p>
+<p>
+    A report published by Cloud Security Alliance (CSA) about the top threats of 
+    cloud computing, using security guidelines and this report below is the main point 
+    to consider for security:
+</p>
+<ol>
+    <li>
+        <b>Data Breaches</b>: Any data or information that is not intended for unauthorized access 
+        is stolen because of human error, application vulnerabilities, or poor security 
+        practices. The primary objective of a targeted attack is data breaches.
+    </li>
+    <li>
+        <b>Weak Identity, Credential, and Access Management</b>: Lack of identity and access management 
+        system and credential policy is the main reason for data breaches. Identity management 
+        system must support immediate de-provisioning of access to resources when personnel 
+        changes. We can consider multifactor authentication system. TLS certificates, 
+        keys used to protect the access of data and keys used to encryption of data at 
+        rest must be rotated periodically. There should be a provision to enforce change 
+        password periodically.
+    </li>
+    <li>
+        <b>Malicious Insiders</b>: CERN defines an insider threat as follows: “A malicious 
+        insider threat to an organization is a current or former employee, contractor, 
+        or other business partner who has or had authorized access to an organization’s 
+        network, system, or data and intentionally exceeded or misused that access in a 
+        manner that negatively affected the confidentiality, integrity, or availability 
+        of the organization’s information or information systems.”
+    </li>
+    <li>
+        <b>Advanced Persistent Threats (APTs) </b>: Spearphishing, direct hacking systems, 
+        delivering attack code through USB devices, penetration through partner 
+        networks and use of unsecured or third-party networks are common points of entry 
+        for APTs. Awareness programs that are regularly reinforced are one of the best 
+        defenses against these types of attacks because many of these vulnerabilities 
+        require user intervention or action.
+    </li>
+    <li>
+        <b>Denial of Service (DoS)</b>: Denial-of-service (DoS) attacks are attacks meant to 
+        prevent users of a service from being able to access their data or their 
+        applications. By forcing the targeted cloud service to consume inordinate 
+        amounts of finite system resources such as processor power, memory, disk space 
+        or network bandwidth, the attacker—or attackers, as is the case in distributed 
+        denial-of-service (DDoS) attacks—causes an intolerable system slowdown and leaves 
+        all legitimate service users confused and angry as to why the service is not responding.
+    </li>
+    <li>
+        Network Security in the cloud: Ensuring the confidentiality and integrity of an 
+        organization’s data-in-transit is very important in network security. Stratoscale 
+        identifies the following four principles of network security in cloud computing:
+        <ol>
+            <li>
+                Isolation between multiple zones should be guaranteed using layers of firewalls.
+            </li>
+            <li>
+                Network controls for traffic to and from their applications.
+            </li>
+            <li>
+                End-to-end transport level encryption should be used by applications.
+            </li>
+            <li>
+                Standard secure encapsulation protocols such as IPSEC, SSH, SSL 
+                should be used when deploying a virtual private cloud.
+            </li>
+        </ol>
+    </li>
+</ol>
+<p>
+    To reduce vulnerability in the cloud, organizations can consider below steps:
+</p>
+<ol>
+    <li>
+        Make sure everyone in the organization understands Cloud Service Provider’s 
+        shared responsibility model and its impact based on their role in an organization.
+    </li>
+    <li>
+        Good planning is required for selecting an appropriate tool and technology 
+        or any applications to move in the cloud. Also, a good amount of analysis 
+        and planning needed to buy vs build analysis.
+    </li>
+    <li>
+        Ensure all steps should be taken to maintain the availability of your application.
+    </li>
+    <li>
+        Should have good real-time and continuous monitoring and alert mechanism in place, 
+        so that you can identify prospective threat upfront. For example, you started 
+        getting a huge hit from an area where you do not have any customer, or you can 
+        catch if anyone trying continuously with a different wrong token to access your system.
+    </li>
+    <li>
+        Always rotate cryptographic key and TLS key based on regular or irregular 
+        rotation strategy you have chosen.
+    </li>
+    <li>
+        Continuously learning about the latest trends and vulnerabilities and keep 
+        updating your security plan and tools accordingly.
+    </li>
+    <li>
+        Implements best practices for deployments and ensure to have full automation.
+    </li>
+    <li>
+        Ensure proper use of Identity and Access Management (IAM) for assign user 
+        access rights and resource access policies.
+    </li>
+</ol>
+
+<p>Photographs by <a href="https://unsplash.com/" target="_blank">Unsplash</a>.</p>
